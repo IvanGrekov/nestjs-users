@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TUser, TCreateUser, TUserId, TEditUser } from './types/user.types';
+import { TUser, TCreateUser, TUserId, TEditUser } from './dto/user';
 
 @Injectable()
 export class UsersService {
@@ -14,8 +14,6 @@ export class UsersService {
 
   getOne(id: TUserId): TUser | null {
     const user = this.users.find((user) => user.id === id);
-
-    console.log('id', id);
 
     if (!user) {
       return null;
