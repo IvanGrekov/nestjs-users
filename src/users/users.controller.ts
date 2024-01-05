@@ -4,9 +4,12 @@ import {
   Post,
   Delete,
   Patch,
+  Res,
+  HttpStatus,
   Param,
   Body,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { UsersService } from './users.service';
 import { TCreateUser, TUserId, TEditUser } from './dto/user';
 
@@ -24,8 +27,12 @@ export class UsersController {
   }
 
   @Get(':id')
-  getOne(@Param('id') id: TUserId) {
+  getOne(@Res({ passthrough: true }) res: Response, @Param('id') id: TUserId) {
     const user = this.usersService.getOne(id);
+
+    if (!user) {
+      res.status(HttpStatus.NOT_FOUND);
+    }
 
     return {
       user,
@@ -42,8 +49,15 @@ export class UsersController {
   }
 
   @Delete(':id')
-  deleteOne(@Param('id') id: TUserId) {
+  deleteOne(
+    @Res({ passthrough: true }) res: Response,
+    @Param('id') id: TUserId,
+  ) {
     const isRemoved = this.usersService.deleteOne(id);
+
+    if (!isRemoved) {
+      res.status(HttpStatus.NOT_FOUND);
+    }
 
     return {
       isRemoved,
@@ -51,8 +65,16 @@ export class UsersController {
   }
 
   @Patch(':id')
-  editOne(@Param('id') id: TUserId, @Body('user') data: TEditUser) {
+  editOne(
+    @Res({ passthrough: true }) res: Response,
+    @Param('id') id: TUserId,
+    @Body('user') data: TEditUser,
+  ) {
     const user = this.usersService.editOne(id, data);
+
+    if (!user) {
+      res.status(HttpStatus.NOT_FOUND);
+    }
 
     return {
       user,
