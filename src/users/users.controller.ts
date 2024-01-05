@@ -40,8 +40,15 @@ export class UsersController {
   }
 
   @Post()
-  createOne(@Body('user') data: TCreateUser) {
+  createOne(
+    @Res({ passthrough: true }) res: Response,
+    @Body('user') data: TCreateUser,
+  ) {
     const user = this.usersService.createOne(data);
+
+    if (!user) {
+      res.status(HttpStatus.BAD_REQUEST);
+    }
 
     return {
       user,

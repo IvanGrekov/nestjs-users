@@ -22,7 +22,11 @@ export class UsersService {
     return user;
   }
 
-  createOne(data: TCreateUser): TUser {
+  createOne(data: TCreateUser): TUser | null {
+    if (!data.name) {
+      return null;
+    }
+
     const id = (this.users.length + 1).toString();
     const user = {
       ...data,
