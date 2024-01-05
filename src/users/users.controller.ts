@@ -11,7 +11,9 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from './users.service';
-import { TCreateUser, TUserId, TEditUser } from './dto/user';
+import { TUserId } from './types/user.types';
+import { CreateUserDto } from './dto/createUser.dto';
+import { EditUserDto } from './dto/editUser.dto';
 
 @Controller('users')
 export class UsersController {
@@ -42,7 +44,7 @@ export class UsersController {
   @Post()
   createOne(
     @Res({ passthrough: true }) res: Response,
-    @Body('user') data: TCreateUser,
+    @Body('user') data: CreateUserDto,
   ) {
     const user = this.usersService.createOne(data);
 
@@ -75,7 +77,7 @@ export class UsersController {
   editOne(
     @Res({ passthrough: true }) res: Response,
     @Param('id') id: TUserId,
-    @Body('user') data: TEditUser,
+    @Body('user') data: EditUserDto,
   ) {
     const user = this.usersService.editOne(id, data);
 

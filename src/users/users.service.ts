@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { TUser, TCreateUser, TUserId, TEditUser } from './dto/user';
+import { TUser, TUserId } from './types/user.types';
+import { CreateUserDto } from './dto/createUser.dto';
+import { EditUserDto } from './dto/editUser.dto';
 
 @Injectable()
 export class UsersService {
@@ -22,7 +24,7 @@ export class UsersService {
     return user;
   }
 
-  createOne(data: TCreateUser): TUser | null {
+  createOne(data: CreateUserDto): TUser | null {
     if (!data.name) {
       return null;
     }
@@ -52,7 +54,7 @@ export class UsersService {
     return isRemoved;
   }
 
-  editOne(id: TUserId, data: TEditUser): TUser | null {
+  editOne(id: TUserId, data: EditUserDto): TUser | null {
     const userIndex = this.users.findIndex((user) => user.id === id);
 
     if (userIndex === -1) {
