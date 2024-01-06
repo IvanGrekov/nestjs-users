@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './entities/user.entity';
+import { TUser, TUserId } from './types/user.types';
 import { CreateUserDto } from './dto/createUser.dto';
 import { EditUserDto } from './dto/editUser.dto';
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [
+  private readonly users: TUser[] = [
     { id: '1', name: 'John' },
     { id: '2', name: 'Doe' },
   ];
 
-  getAll(): User[] {
+  getAll(): TUser[] {
     return this.users;
   }
 
-  getOne(id: User['id']): User | null {
+  getOne(id: TUserId): TUser | null {
     const user = this.users.find((user) => user.id === id);
 
     if (!user) {
@@ -24,7 +24,7 @@ export class UsersService {
     return user;
   }
 
-  createOne(data: CreateUserDto): User | null {
+  createOne(data: CreateUserDto): TUser | null {
     if (!data.name) {
       return null;
     }
@@ -39,7 +39,7 @@ export class UsersService {
     return user;
   }
 
-  deleteOne(id: User['id']): boolean {
+  deleteOne(id: TUserId): boolean {
     let isRemoved = false;
     this.users.filter((user) => {
       if (user.id === id) {
@@ -54,7 +54,7 @@ export class UsersService {
     return isRemoved;
   }
 
-  editOne(id: User['id'], data: EditUserDto): User | null {
+  editOne(id: TUserId, data: EditUserDto): TUser | null {
     const userIndex = this.users.findIndex((user) => user.id === id);
 
     if (userIndex === -1) {

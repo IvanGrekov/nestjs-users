@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from './users.service';
-import { User } from './entities/user.entity';
+import { TUserId } from './types/user.types';
 import { CreateUserDto } from './dto/createUser.dto';
 import { EditUserDto } from './dto/editUser.dto';
 
@@ -29,10 +29,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  getOne(
-    @Res({ passthrough: true }) res: Response,
-    @Param('id') id: User['id'],
-  ) {
+  getOne(@Res({ passthrough: true }) res: Response, @Param('id') id: TUserId) {
     const user = this.usersService.getOne(id);
 
     if (!user) {
@@ -63,7 +60,7 @@ export class UsersController {
   @Delete(':id')
   deleteOne(
     @Res({ passthrough: true }) res: Response,
-    @Param('id') id: User['id'],
+    @Param('id') id: TUserId,
   ) {
     const isRemoved = this.usersService.deleteOne(id);
 
@@ -79,7 +76,7 @@ export class UsersController {
   @Patch(':id')
   editOne(
     @Res({ passthrough: true }) res: Response,
-    @Param('id') id: User['id'],
+    @Param('id') id: TUserId,
     @Body('user') data: EditUserDto,
   ) {
     const user = this.usersService.editOne(id, data);
