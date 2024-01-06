@@ -1,4 +1,4 @@
-import { TUser } from '../types/user.types';
+import { TUser } from '../entities/user.entity';
 
 export class EditUserDto {
   name?: TUser['name'];
