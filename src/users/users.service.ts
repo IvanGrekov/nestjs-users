@@ -5,7 +5,7 @@ import { EditUserDto } from './dto/editUser.dto';
 
 @Injectable()
 export class UsersService {
-  private readonly users: TUser[] = [
+  private users: TUser[] = [
     { id: '1', name: 'John' },
     { id: '2', name: 'Doe' },
   ];
@@ -41,7 +41,7 @@ export class UsersService {
 
   deleteOne(id: TUserId): boolean {
     let isRemoved = false;
-    this.users.filter((user) => {
+    this.users = this.users.filter((user) => {
       if (user.id === id) {
         isRemoved = true;
 
