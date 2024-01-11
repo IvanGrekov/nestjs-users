@@ -5,9 +5,10 @@ import {
   Delete,
   Patch,
   Res,
-  HttpStatus,
   Param,
   Body,
+  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from './users.service';
@@ -29,11 +30,11 @@ export class UsersController {
   }
 
   @Get(':id')
-  getOne(@Res({ passthrough: true }) res: Response, @Param('id') id: TUserId) {
+  getOne(@Param('id') id: TUserId) {
     const user = this.usersService.getOne(id);
 
     if (!user) {
-      res.status(HttpStatus.NOT_FOUND);
+      throw new NotFoundException();
     }
 
     return {
@@ -42,14 +43,11 @@ export class UsersController {
   }
 
   @Post()
-  createOne(
-    @Res({ passthrough: true }) res: Response,
-    @Body('user') data: CreateUserDto,
-  ) {
+  createOne(@Body('user') data: CreateUserDto) {
     const user = this.usersService.createOne(data);
 
     if (!user) {
-      res.status(HttpStatus.BAD_REQUEST);
+      throw new BadRequestException();
     }
 
     return {
@@ -65,7 +63,7 @@ export class UsersController {
     const isRemoved = this.usersService.deleteOne(id);
 
     if (!isRemoved) {
-      res.status(HttpStatus.NOT_FOUND);
+      throw new NotFoundException();
     }
 
     return {
@@ -74,15 +72,11 @@ export class UsersController {
   }
 
   @Patch(':id')
-  editOne(
-    @Res({ passthrough: true }) res: Response,
-    @Param('id') id: TUserId,
-    @Body('user') data: EditUserDto,
-  ) {
+  editOne(@Param('id') id: TUserId, @Body('user') data: EditUserDto) {
     const user = this.usersService.editOne(id, data);
 
     if (!user) {
-      res.status(HttpStatus.NOT_FOUND);
+      throw new NotFoundException();
     }
 
     return {
