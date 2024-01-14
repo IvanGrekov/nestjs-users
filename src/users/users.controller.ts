@@ -4,25 +4,27 @@ import {
   Post,
   Delete,
   Patch,
-  Res,
+  Query,
   Param,
   Body,
   NotFoundException,
   BadRequestException,
+  ParseUUIDPipe,
+  UsePipes,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { UsersService } from './users.service';
 import { TUserId } from './types/user.types';
-import { CreateUserDto } from './dto/createUser.dto';
-import { EditUserDto } from './dto/editUser.dto';
+import { TCreateUserDto, createUserSchema } from './dto/createUser.dto';
+import { TEditUserDto, editUserSchema } from './dto/editUser.dto';
+import { ObjectValidationPipe } from '../pipes/objectValidation.pipe';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  getAll() {
-    const users = this.usersService.getAll();
+  getAll(@Query('limit') limit: number) {
+    const users = this.usersService.getAll(limit);
 
     return {
       users,
@@ -30,7 +32,10 @@ export class UsersController {
   }
 
   @Get(':id')
-  getOne(@Param('id') id: TUserId) {
+  getOne(
+    @Param('id', ParseUUIDPipe)
+    id: TUserId,
+  ) {
     const user = this.usersService.getOne(id);
 
     if (!user) {
@@ -43,7 +48,8 @@ export class UsersController {
   }
 
   @Post()
-  createOne(@Body('user') data: CreateUserDto) {
+  @UsePipes(new ObjectValidationPipe(createUserSchema))
+  createOne(@Body('user') data: TCreateUserDto) {
     const user = this.usersService.createOne(data);
 
     if (!user) {
@@ -56,10 +62,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  deleteOne(
-    @Res({ passthrough: true }) res: Response,
-    @Param('id') id: TUserId,
-  ) {
+  deleteOne(@Param('id', ParseUUIDPipe) id: TUserId) {
     const isRemoved = this.usersService.deleteOne(id);
 
     if (!isRemoved) {
@@ -72,7 +75,10 @@ export class UsersController {
   }
 
   @Patch(':id')
-  editOne(@Param('id') id: TUserId, @Body('user') data: EditUserDto) {
+  editOne(
+    @Param('id', ParseUUIDPipe) id: TUserId,
+    @Body('user', new ObjectValidationPipe(editUserSchema)) data: TEditUserDto,
+  ) {
     const user = this.usersService.editOne(id, data);
 
     if (!user) {

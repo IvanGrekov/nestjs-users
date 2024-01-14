@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { TUser, TUserId } from './types/user.types';
-import { CreateUserDto } from './dto/createUser.dto';
-import { EditUserDto } from './dto/editUser.dto';
+import { TCreateUserDto } from './dto/createUser.dto';
+import { TEditUserDto } from './dto/editUser.dto';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class UsersService {
   private users: TUser[] = [
-    { id: '1', name: 'John' },
-    { id: '2', name: 'Doe' },
+    { id: '24826020-59e0-4fad-8217-7eb1eff3dae7', name: 'John' },
+    { id: 'e35ac92a-6b66-475d-9b75-b5a274829e5a', name: 'Doe' },
   ];
 
-  getAll(): TUser[] {
-    return this.users;
+  getAll(limit: number): TUser[] {
+    return this.users.slice(0, limit);
   }
 
   getOne(id: TUserId): TUser | null {
@@ -24,12 +25,12 @@ export class UsersService {
     return user;
   }
 
-  createOne(data: CreateUserDto): TUser | null {
+  createOne(data: TCreateUserDto): TUser | null {
     if (!data.name) {
       return null;
     }
 
-    const id = (this.users.length + 1).toString();
+    const id = randomUUID();
     const user = {
       ...data,
       id,
@@ -54,19 +55,17 @@ export class UsersService {
     return isRemoved;
   }
 
-  editOne(id: TUserId, data: EditUserDto): TUser | null {
+  editOne(id: TUserId, data: TEditUserDto): TUser | null {
     const userIndex = this.users.findIndex((user) => user.id === id);
-
     if (userIndex === -1) {
       return null;
     }
 
-    const user = this.users[userIndex];
     this.users[userIndex] = {
-      ...user,
+      ...this.users[userIndex],
       ...data,
     };
 
-    return user;
+    return this.users[userIndex];
   }
 }

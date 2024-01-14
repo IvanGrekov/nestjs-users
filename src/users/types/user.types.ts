@@ -1,5 +1,7 @@
+import { UUID } from 'crypto';
+
 export type TUser = {
-  id: string;
+  id: UUID;
   name: string;
 };
 
