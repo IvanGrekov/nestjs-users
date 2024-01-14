@@ -1,9 +1,15 @@
-import { z } from 'zod';
+import { IsString, MinLength, MaxLength, IsOptional } from 'class-validator';
 
-export const editUserSchema = z
-  .object({
-    name: z.string().min(1).max(255),
+export class EditUserDto {
+  @IsString({
+    message: 'Name must be a string',
   })
-  .partial();
-
-export type TEditUserDto = z.infer<typeof editUserSchema>;
+  @MinLength(1, {
+    message: 'Name is too short',
+  })
+  @MaxLength(255, {
+    message: 'Name is too long',
+  })
+  @IsOptional()
+  name?: string;
+}

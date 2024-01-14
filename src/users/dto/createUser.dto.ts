@@ -1,9 +1,14 @@
-import { z } from 'zod';
+import { IsString, MinLength, MaxLength } from 'class-validator';
 
-export const createUserSchema = z
-  .object({
-    name: z.string().min(1).max(255),
+export class CreateUserDto {
+  @IsString({
+    message: 'Name must be a string',
   })
-  .required();
-
-export type TCreateUserDto = z.infer<typeof createUserSchema>;
+  @MinLength(1, {
+    message: 'Name is too short',
+  })
+  @MaxLength(255, {
+    message: 'Name is too long',
+  })
+  name: string;
+}

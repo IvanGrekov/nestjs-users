@@ -14,8 +14,8 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { TUserId } from './types/user.types';
-import { TCreateUserDto, createUserSchema } from './dto/createUser.dto';
-import { TEditUserDto, editUserSchema } from './dto/editUser.dto';
+import { CreateUserDto } from './dto/createUser.dto';
+import { EditUserDto } from './dto/editUser.dto';
 import { ObjectValidationPipe } from '../pipes/objectValidation.pipe';
 
 @Controller('users')
@@ -48,8 +48,8 @@ export class UsersController {
   }
 
   @Post()
-  @UsePipes(new ObjectValidationPipe(createUserSchema))
-  createOne(@Body('user') data: TCreateUserDto) {
+  @UsePipes(ObjectValidationPipe)
+  createOne(@Body('user') data: CreateUserDto) {
     const user = this.usersService.createOne(data);
 
     if (!user) {
@@ -77,7 +77,7 @@ export class UsersController {
   @Patch(':id')
   editOne(
     @Param('id', ParseUUIDPipe) id: TUserId,
-    @Body('user', new ObjectValidationPipe(editUserSchema)) data: TEditUserDto,
+    @Body('user', ObjectValidationPipe) data: EditUserDto,
   ) {
     const user = this.usersService.editOne(id, data);
 

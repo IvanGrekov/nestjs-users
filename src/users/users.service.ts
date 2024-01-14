@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TUser, TUserId } from './types/user.types';
-import { TCreateUserDto } from './dto/createUser.dto';
-import { TEditUserDto } from './dto/editUser.dto';
+import { CreateUserDto } from './dto/createUser.dto';
+import { EditUserDto } from './dto/editUser.dto';
 import { randomUUID } from 'crypto';
 
 @Injectable()
@@ -25,11 +25,7 @@ export class UsersService {
     return user;
   }
 
-  createOne(data: TCreateUserDto): TUser | null {
-    if (!data.name) {
-      return null;
-    }
-
+  createOne(data: CreateUserDto): TUser | null {
     const id = randomUUID();
     const user = {
       ...data,
@@ -55,7 +51,7 @@ export class UsersService {
     return isRemoved;
   }
 
-  editOne(id: TUserId, data: TEditUserDto): TUser | null {
+  editOne(id: TUserId, data: EditUserDto): TUser | null {
     const userIndex = this.users.findIndex((user) => user.id === id);
     if (userIndex === -1) {
       return null;
