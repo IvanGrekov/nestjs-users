@@ -10,6 +10,8 @@ import {
   NotFoundException,
   BadRequestException,
   ParseUUIDPipe,
+  DefaultValuePipe,
+  ParseIntPipe,
   UsePipes,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -23,7 +25,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  getAll(@Query('limit') limit: number) {
+  getAll(@Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number) {
     const users = this.usersService.getAll(limit);
 
     return {

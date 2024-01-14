@@ -9,6 +9,14 @@ export class UsersService {
   private users: TUser[] = [
     { id: '24826020-59e0-4fad-8217-7eb1eff3dae7', name: 'John' },
     { id: 'e35ac92a-6b66-475d-9b75-b5a274829e5a', name: 'Doe' },
+    { id: 'f6b8a8c2-7a1a-4f8d-8c4d-2d0f5f9c4c9d', name: 'Steve' },
+    { id: 'b6b8a8c2-7a1a-4f8d-8c4d-2d0f5f9c4c9d', name: 'Bob' },
+    { id: 'c6b8a8c2-7a1a-4f8d-8c4d-2d0f5f9c4c9d', name: 'Alice' },
+    { id: 'd6b8a8c2-7a1a-4f8d-8c4d-2d0f5f9c4c9d', name: 'Eve' },
+    { id: 'e6b8a8c2-7a1a-4f8d-8c4d-2d0f5f9c4c9d', name: 'Mallory' },
+    { id: 'f6b8a8c2-7a1a-4f8d-8c4d-2d0f5f9c4c9d', name: 'Trent' },
+    { id: 'g6b8a8c2-7a1a-4f8d-8c4d-2d0f5f9c4c9d', name: 'Carol' },
+    { id: 'h6b8a8c2-7a1a-4f8d-8c4d-2d0f5f9c4c9d', name: 'Dave' },
   ];
 
   getAll(limit: number): TUser[] {
