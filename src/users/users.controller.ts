@@ -13,14 +13,18 @@ import {
   DefaultValuePipe,
   ParseIntPipe,
   UsePipes,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { TUserId } from './types/user.types';
 import { CreateUserDto } from './dto/createUser.dto';
 import { EditUserDto } from './dto/editUser.dto';
 import { ObjectValidationPipe } from '../pipes/objectValidation.pipe';
+import { AuthGuard } from '../guards/auth.guard';
+import { Roles } from '../decorators/roles.decorator';
 
 @Controller('users')
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -64,6 +68,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @Roles(['admin'])
   deleteOne(@Param('id', ParseUUIDPipe) id: TUserId) {
     const isRemoved = this.usersService.deleteOne(id);
 
