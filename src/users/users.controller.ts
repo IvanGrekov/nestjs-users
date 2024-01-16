@@ -14,6 +14,7 @@ import {
   ParseIntPipe,
   UsePipes,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { TUserId } from './types/user.types';
@@ -22,9 +23,13 @@ import { EditUserDto } from './dto/editUser.dto';
 import { ObjectValidationPipe } from '../pipes/objectValidation.pipe';
 import { AuthGuard } from '../guards/auth.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { TransformerInterceptor } from '../interceptors/transformer.interceptor';
+import { TimeoutInterceptor } from '../interceptors/timeout.interceptor';
 
 @Controller('users')
 @UseGuards(AuthGuard)
+@UseInterceptors(TransformerInterceptor)
+@UseInterceptors(TimeoutInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
